@@ -1,0 +1,165 @@
+.container {
+  min-height: calc(100vh - 120px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.siteTitle {
+  font-size: 2.25rem;
+  font-family: var(--font-main);
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 12px var(--gold-glow);
+  text-align: center;
+}
+
+.loginCard {
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  text-align: center;
+}
+
+.iconWrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--gold-glow);
+  color: var(--gold-dark);
+  margin-bottom: 0.5rem;
+}
+
+.title {
+  margin-bottom: 0.25rem;
+}
+
+.subtitle {
+  color: var(--text-muted);
+}
+
+.errorBox {
+  padding: 1rem;
+  background: var(--danger-glow);
+  color: var(--danger);
+  border: 1px solid rgba(244, 67, 54, 0.3);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+.pinContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  padding: 1.5rem 0;
+}
+
+.hiddenInput {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: text;
+  z-index: 10;
+  caret-color: transparent;
+  color: transparent;
+  outline: none;
+}
+
+.pinBox {
+  width: 64px;
+  height: 80px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.25rem;
+  font-family: var(--font-numbers);
+  font-weight: 700;
+  border: 2px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.5);
+  transition: all 0.2s ease;
+  color: var(--text-primary);
+}
+
+.dot {
+  width: 16px;
+  height: 16px;
+  background-color: var(--text-primary);
+  border-radius: 50%;
+}
+
+.cursor {
+  width: 1.5px;
+  height: 16px;
+  background-color: #0070f3;
+  border-radius: 1px;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  from, to { background-color: transparent }
+  50% { background-color: #0070f3 }
+}
+
+@media (max-width: 400px) {
+  .pinContainer {
+    gap: 8px;
+  }
+  .pinBox {
+    width: 54px;
+    height: 68px;
+    font-size: 1.75rem;
+    border-radius: 12px;
+  }
+  .cursor {
+    height: 12px;
+  }
+}
+
+.pinBoxActive {
+  border-color: var(--gold-primary);
+  background: white;
+  box-shadow: 0 4px 16px var(--gold-glow);
+  transform: scale(1.05);
+}
+
+.pinBoxFilled {
+  border-color: rgba(255, 124, 149, 0.4);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.loadingBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 48px;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

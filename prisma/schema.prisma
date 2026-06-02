@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model PriceHistory {
+  id        Int      @id @default(autoincrement())
+  name      String
+  buyPrice  Float
+  sellPrice Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PortfolioItem {
+  id        Int      @id @default(autoincrement())
+  buyDate   DateTime
+  quantity  Float
+  buyPrice  Float
+  status    String   // "Đang giữ" or "Đã bán"
+  sellPrice Float?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SjcPriceHistory {
+  id            Int      @id @default(autoincrement())
+  buyPrice      Float
+  sellPrice     Float
+  yesterdayBuy  Float
+  yesterdaySell Float
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model WorldGoldPriceHistory {
+  id            Int      @id @default(autoincrement())
+  buyPrice      Float
+  sellPrice     Float
+  yesterdayBuy  Float
+  yesterdaySell Float
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model RateLimit {
+  id        String   @id @default(cuid())
+  ip        String   @unique
+  attempts  Int      @default(0)
+  userAgent String?
+  isLocked  Boolean  @default(false)
+  updatedAt DateTime @updatedAt
+}
