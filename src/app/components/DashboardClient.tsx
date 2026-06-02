@@ -223,8 +223,8 @@ export default function DashboardClient({ initialLivePrice, initialPortfolio }: 
         {/* Card 1: Live Price Card (Ngoc Cua) */}
         <div className="glass-card">
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-            <div style={{ background: 'var(--gold-glow)', padding: '10px', borderRadius: '16px', color: 'var(--gold-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Flower size={24} />
+            <div style={{ background: 'var(--gold-glow)', padding: '10px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '44px', height: '44px' }}>
+              <img src="/ngoc-cua-logo.png" alt="Ngọc Của Logo" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
             </div>
             <h2 style={{ fontSize: '1.2rem', fontWeight: 600 }}>
               {(livePrice?.name === 'Nhẫn Trơn 9999' || !livePrice?.name) ? 'Nhẫn trơn 9999 Ngọc Của' : `${livePrice.name} Ngọc Của`}

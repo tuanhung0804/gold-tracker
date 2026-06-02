@@ -51,5 +51,6 @@ next-env.d.ts
 # Temp files, images, and reports
 *.html
 *.png
+!public/*.png
 lighthouse-report*.json
 
