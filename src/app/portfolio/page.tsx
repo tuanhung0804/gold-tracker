@@ -1,18 +1,17 @@
-'use client';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { verifySessionToken } from '@/lib/session';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+export const dynamic = 'force-dynamic';
 
-export default function PortfolioRedirect() {
-  const router = useRouter();
+export default async function PortfolioRedirectPage() {
+  const cookieStore = await cookies();
+  const session = cookieStore.get('session')?.value;
+  const decoded = session ? await verifySessionToken(session) : null;
+  
+  if (!decoded) {
+    redirect('/login');
+  }
 
-  useEffect(() => {
-    router.replace('/#portfolio');
-  }, [router]);
-
-  return (
-    <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
-      Đang chuyển hướng sang Hũ vàng của bé Linh...
-    </div>
-  );
+  redirect('/price#portfolio');
 }

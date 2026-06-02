@@ -1,11 +1,19 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState('overview');
+  const [isVerified, setIsVerified] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsVerified(sessionStorage.getItem('pin_verified') === 'true');
+    }
+  }, [pathname]);
 
   useEffect(() => {
     if (pathname === '/login') return;
@@ -28,11 +36,15 @@ export default function Navbar() {
     return () => window.removeEventListener('hashchange', syncActiveTab);
   }, [pathname]);
 
-  if (pathname === '/login') return null;
+  if (pathname === '/login' || !isVerified) return null;
 
   const handleTabClick = (e: React.MouseEvent, tabHash: string) => {
     e.preventDefault();
-    window.location.hash = tabHash;
+    if (pathname === '/price') {
+      window.location.hash = tabHash;
+    } else {
+      router.push('/price' + (tabHash ? '#' + tabHash : ''));
+    }
   };
 
   const getLinkStyle = (tabName: string) => {

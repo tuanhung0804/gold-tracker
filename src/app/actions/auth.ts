@@ -94,12 +94,7 @@ export async function submitPin(pin: string) {
     return { error: 'An unexpected error occurred.' };
   }
 
-  // Call redirect outside the try-catch block because redirect() throws a NEXT_REDIRECT error
-  if (role === 'admin') {
-    redirect('/admin/lockouts');
-  } else if (role === 'user') {
-    redirect('/');
-  }
+  return { success: true, role };
 }
 
 export async function logout() {

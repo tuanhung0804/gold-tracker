@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import DashboardClient from './DashboardClient';
 import PortfolioContent from './PortfolioContent';
 import HistoryContent from './HistoryContent';
@@ -37,15 +38,28 @@ interface TabSliderProps {
 }
 
 export default function TabSlider({ initialLivePrice, initialPortfolio }: TabSliderProps) {
+  const [isVerified, setIsVerified] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const [dragOffset, setDragOffset] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+
+  const router = useRouter();
 
   const startX = useRef(0);
   const startY = useRef(0);
   const startTime = useRef(0);
   const isValidDrag = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // 0. Verify PIN verification state
+  useEffect(() => {
+    const verified = sessionStorage.getItem('pin_verified') === 'true';
+    if (!verified) {
+      router.replace('/login');
+    } else {
+      setIsVerified(true);
+    }
+  }, [router]);
 
   // 1. Sync from URL hash (/#portfolio, /#history) to activeTab state
   useEffect(() => {
@@ -250,6 +264,8 @@ export default function TabSlider({ initialLivePrice, initialPortfolio }: TabSli
     transition: isDragging ? 'none' : 'transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)',
     willChange: 'transform',
   };
+
+  if (!isVerified) return null;
 
   return (
     <div style={{ width: '100%', overflow: 'hidden', minHeight: 'calc(100vh - 80px)' }} ref={containerRef}>

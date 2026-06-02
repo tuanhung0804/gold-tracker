@@ -1,17 +1,26 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { logout } from '@/app/actions/auth';
 
 export default function SessionCloser() {
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     const performSessionCleanup = async () => {
       // Access window.location.pathname directly in client-side useEffect
       const currentPath = window.location.pathname;
       if (currentPath !== '/login') {
+        // Retrieve successful login flag to bypass false reload triggers during redirects
+        const justLoggedIn = sessionStorage.getItem('justLoggedIn');
+        if (justLoggedIn === 'true') {
+          sessionStorage.removeItem('justLoggedIn');
+          console.log('[SessionCloser] Successful login redirect detected. Skipping reload check.');
+          return;
+        }
+
         // Retrieve navigation timing to check if this was a page refresh
         const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
         const isReload = (navigation && navigation.type === 'reload') || 
@@ -22,6 +31,9 @@ export default function SessionCloser() {
 
         if (isRealReload) {
           console.log('[SessionCloser] Page refresh detected on protected page. Wiping session...');
+          if (typeof window !== 'undefined') {
+            sessionStorage.removeItem('pin_verified');
+          }
           await logout();
           router.replace('/login');
         }
@@ -31,7 +43,7 @@ export default function SessionCloser() {
       (window as any).__isSoftNavigation = true;
     };
     performSessionCleanup();
-  }, [router]); // Include router in dependencies to satisfy hooks lint rule
+  }, [router, pathname]); // Re-run whenever router or pathname (URL) changes
 
   return null;
 }

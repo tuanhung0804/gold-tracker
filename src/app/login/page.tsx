@@ -40,11 +40,26 @@ export default function LoginPage() {
     if (pin.length !== 4 || isPending) return;
     
     startTransition(async () => {
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('justLoggedIn', 'true');
+      }
       const res = await submitPin(pin);
       if (res && res.error) {
         setError(res.error);
         setPin(''); // Reset PIN on error
         if (inputRef.current) inputRef.current.focus();
+        if (typeof window !== 'undefined') {
+          sessionStorage.removeItem('justLoggedIn');
+        }
+      } else if (res && res.success) {
+        if (typeof window !== 'undefined') {
+          sessionStorage.setItem('pin_verified', 'true');
+        }
+        if (res.role === 'admin') {
+          router.push('/admin/lockouts');
+        } else {
+          router.push('/price');
+        }
       }
     });
   };
