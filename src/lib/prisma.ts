@@ -4,6 +4,10 @@ import path from 'path';
 
 const prismaClientSingleton = () => {
   let dbUrl = process.env.DATABASE_URL;
+  // Automatically use Turso on Google Cloud Run if not configured
+  if (process.env.K_SERVICE && (!dbUrl || dbUrl.startsWith('file:'))) {
+    dbUrl = 'libsql://gold-tracker-db-tuanhung0804.aws-ap-northeast-1.turso.io';
+  }
   // Resolve relative file: URLs to absolute paths so libsql can find the DB
   if (!dbUrl || dbUrl === 'undefined') {
     dbUrl = `file:${path.resolve(process.cwd(), 'dev.db')}`;
