@@ -35,7 +35,7 @@ export default async function PricePage() {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    const [latestNgocCua, latestSjc, latestWorld, yesterdaySjc, yesterdayWorld] = await Promise.all([
+    const [latestNgocCua, latestSjc, latestWorld, yesterdaySjc] = await Promise.all([
       prisma.priceHistory.findFirst({
         where: { name: 'Nhẫn Trơn 9999' },
         orderBy: { createdAt: 'desc' }
@@ -49,10 +49,6 @@ export default async function PricePage() {
       prisma.sjcPriceHistory.findFirst({
         where: { createdAt: { lt: today } },
         orderBy: { createdAt: 'desc' }
-      }),
-      prisma.worldGoldPriceHistory.findFirst({
-        where: { createdAt: { lt: today } },
-        orderBy: { createdAt: 'desc' }
       })
     ]);
 
@@ -60,8 +56,8 @@ export default async function PricePage() {
       const sjcYesterdayBuy = yesterdaySjc ? yesterdaySjc.buyPrice : (latestSjc ? latestSjc.buyPrice : 0);
       const sjcYesterdaySell = yesterdaySjc ? yesterdaySjc.sellPrice : (latestSjc ? latestSjc.sellPrice : 0);
       
-      const worldYesterdayBuy = yesterdayWorld ? yesterdayWorld.buyPrice : (latestWorld ? latestWorld.buyPrice : 0);
-      const worldYesterdaySell = yesterdayWorld ? yesterdayWorld.sellPrice : (latestWorld ? latestWorld.sellPrice : 0);
+      const worldYesterdayBuy = latestWorld ? latestWorld.yesterdayBuy : 0;
+      const worldYesterdaySell = latestWorld ? latestWorld.yesterdaySell : 0;
 
       livePrice = {
         name: latestNgocCua.name,

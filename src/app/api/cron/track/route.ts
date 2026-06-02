@@ -78,12 +78,18 @@ export async function GET(request: Request) {
     if (data.worldGold) {
       try {
         const latestWorld = await prisma.worldGoldPriceHistory.findFirst({
-          orderBy: { createdAt: 'desc' }
+          orderBy: { id: 'desc' }
         });
-        if (latestWorld && latestWorld.buyPrice === data.worldGold.buyPrice && latestWorld.sellPrice === data.worldGold.sellPrice && latestWorld.yesterdayBuy === data.worldGold.yesterdayBuy && latestWorld.yesterdaySell === data.worldGold.yesterdaySell) {
+        if (latestWorld) {
           await prisma.worldGoldPriceHistory.update({
             where: { id: latestWorld.id },
-            data: { updatedAt: new Date() }
+            data: {
+              buyPrice: data.worldGold.buyPrice,
+              sellPrice: data.worldGold.sellPrice,
+              yesterdayBuy: data.worldGold.yesterdayBuy,
+              yesterdaySell: data.worldGold.yesterdaySell,
+              updatedAt: new Date()
+            }
           });
         } else {
           await prisma.worldGoldPriceHistory.create({

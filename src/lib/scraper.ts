@@ -293,12 +293,18 @@ export async function fetchGoldPrice(options?: { forceRefresh?: boolean }): Prom
 
           const processLazyWorldDbUpdate = async (buyPrice: number, sellPrice: number, yesterdayBuy: number, yesterdaySell: number) => {
             const latest = await prisma.worldGoldPriceHistory.findFirst({
-              orderBy: { createdAt: 'desc' }
+              orderBy: { id: 'desc' }
             });
-            if (latest && latest.buyPrice === buyPrice && latest.sellPrice === sellPrice && latest.yesterdayBuy === yesterdayBuy && latest.yesterdaySell === yesterdaySell) {
+            if (latest) {
               await prisma.worldGoldPriceHistory.update({
                 where: { id: latest.id },
-                data: { updatedAt: new Date() }
+                data: {
+                  buyPrice,
+                  sellPrice,
+                  yesterdayBuy,
+                  yesterdaySell,
+                  updatedAt: new Date()
+                }
               });
             } else {
               await prisma.worldGoldPriceHistory.create({
