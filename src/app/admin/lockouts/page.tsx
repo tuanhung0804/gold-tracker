@@ -1,6 +1,6 @@
 import prisma from '@/lib/prisma';
 import { ShieldCheck, ShieldAlert, Unlock, ArrowLeft } from 'lucide-react';
-import { unblockIp } from '@/app/actions/admin';
+import { unblockIp } from '@/actions/admin';
 import Link from 'next/link';
 import styles from './page.module.css';
 

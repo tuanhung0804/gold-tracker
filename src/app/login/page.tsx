@@ -2,7 +2,7 @@
 
 import { useState, useTransition, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { submitPin } from '@/app/actions/auth';
+import { submitPin } from '@/actions/auth';
 import { Lock, AlertCircle, Loader2 } from 'lucide-react';
 import styles from './page.module.css';
 

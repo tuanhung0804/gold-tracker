@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Mali, Comfortaa } from "next/font/google";
 import "./globals.css";
 
-import Navbar from './components/Navbar';
-import SessionCloser from './components/SessionCloser';
+import Navbar from '@/components/Navbar';
+import SessionCloser from '@/components/SessionCloser';
 
 const mali = Mali({
   subsets: ["vietnamese", "latin"],

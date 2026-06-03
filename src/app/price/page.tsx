@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { verifySessionToken } from '@/lib/session';
 import prisma from '@/lib/prisma';
-import TabSlider from '../components/TabSlider';
+import TabSlider from '@/components/TabSlider';
 
 export const dynamic = 'force-dynamic';
 

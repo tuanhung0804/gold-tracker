@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { logout } from '@/app/actions/auth';
+import { logout } from '@/actions/auth';
 
 export default function SessionCloser() {
   const router = useRouter();
