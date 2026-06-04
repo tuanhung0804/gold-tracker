@@ -12,14 +12,15 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [isPending, startTransition] = useTransition();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [images, setImages] = useState<string[]>(galleryImages);
   const [randomImage, setRandomImage] = useState<string | null>(null);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Gallery images with captions dynamically generated from gallery.json
-  const GALLERY_MEMORIES = galleryImages.map((filename) => ({
+  // Gallery images with captions dynamically generated from state
+  const GALLERY_MEMORIES = images.map((filename) => ({
     filename,
     caption: "Kỷ niệm"
   }));
@@ -46,10 +47,29 @@ export default function LoginPage() {
 
   // Load random Polaroid image client-side to avoid hydration mismatches
   useEffect(() => {
-    const N = galleryImages.length;
+    if (images.length === 0) return;
+    const N = images.length;
     const I = Math.floor(Math.random() * N);
-    const filename = galleryImages[I];
-    setRandomImage(`/assets/gallery/${filename}`);
+    const filename = images[I];
+    setRandomImage(`/api/gallery/image?name=${filename}`);
+  }, [images]);
+
+  // Fetch dynamic GCS images on mount
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const res = await fetch('/api/gallery');
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data) && data.length > 0) {
+            setImages(data);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch GCS images:', err);
+      }
+    };
+    fetchImages();
   }, []);
 
   // Focus input on mount
@@ -131,7 +151,7 @@ export default function LoginPage() {
               return (
                 <img 
                   key={memory.filename} 
-                  src={`/assets/gallery/${memory.filename}`} 
+                  src={`/api/gallery/image?name=${memory.filename}`} 
                   alt={memory.caption}
                   className={`${styles.slideshowImage} ${slideClass}`}
                   loading="eager"
