@@ -18,17 +18,11 @@ export default function LoginPage() {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Gallery images with captions
-  const GALLERY_MEMORIES = [
-    { filename: "0f20bd63-e093-4bd4-a43f-5218eae2cb38.jpg", caption: "Nụ cười Linh" },
-    { filename: "1d8297a4-6408-4392-ad11-228b6e3114c1.jpg", caption: "Má bánh bao" },
-    { filename: "49db71be-de67-46a0-b1b6-d348338f4d4c.jpg", caption: "Công chúa nhỏ" },
-    { filename: "a55bfb3b-68dc-42e9-b63c-7f55dedd3e63.jpg", caption: "Bé Linh đáng yêu" },
-    { filename: "dbb88906-8d9f-4e5a-9908-89a586670a87.jpg", caption: "Bên nhau" },
-    { filename: "dfd44ccd-b917-4813-8608-549a2eea13f0.jpg", caption: "Bình yên" },
-    { filename: "f6a477dd-cc99-45e5-914e-8a289ab2dfc1.jpg", caption: "Thương bé Linh" },
-    { filename: "fe6a3037-556f-479c-8485-ef79803d6487.jpg", caption: "Mãi bên nhau" }
-  ];
+  // Gallery images with captions dynamically generated from gallery.json
+  const GALLERY_MEMORIES = galleryImages.map((filename) => ({
+    filename,
+    caption: "Kỷ niệm"
+  }));
 
   // Screen size check to prevent timer execution on mobile
   useEffect(() => {
