@@ -116,8 +116,10 @@ export async function GET(request: Request) {
       return NextResponse.json({ status: 'Heartbeat updated for all gold types', data });
     } else {
       // Price changed, get yesterday's price for email comparison
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
+      const tzOffset = 7 * 60 * 60 * 1000;
+      const todayLocal = new Date(Date.now() + tzOffset);
+      todayLocal.setUTCHours(0, 0, 0, 0);
+      const today = new Date(todayLocal.getTime() - tzOffset);
       const yesterdayRecord = await prisma.priceHistory.findFirst({
         where: {
           name: data.name,

@@ -32,8 +32,10 @@ export default async function PricePage() {
   // Cache miss/stale: Query database fallback instantly to avoid blocking SSR
   if (!livePrice) {
     console.log('[Dashboard Server] Cache miss. Serving from database fallback...');
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const tzOffset = 7 * 60 * 60 * 1000;
+    const todayLocal = new Date(Date.now() + tzOffset);
+    todayLocal.setUTCHours(0, 0, 0, 0);
+    const today = new Date(todayLocal.getTime() - tzOffset);
 
     const [latestNgocCua, latestSjc, latestWorld, yesterdaySjc] = await Promise.all([
       prisma.priceHistory.findFirst({

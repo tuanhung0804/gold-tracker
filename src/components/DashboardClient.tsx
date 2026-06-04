@@ -168,9 +168,18 @@ export default function DashboardClient({ initialLivePrice, initialPortfolio }: 
     const ngocCuaHistory = rawHistory.filter(item => item.name === 'Nhẫn Trơn 9999' || item.name === (livePrice?.name || 'Nhẫn Trơn 9999'));
     if (ngocCuaHistory.length === 0) return initialLivePrice ? initialLivePrice.buyPrice : 0;
     
-    const todayStr = format(new Date(), 'yyyy-MM-dd');
+    const getGmt7DateString = (date: Date) => {
+      return new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'Asia/Ho_Chi_Minh',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      }).format(date);
+    };
+
+    const todayStr = getGmt7DateString(new Date());
     const historyBeforeToday = ngocCuaHistory.filter(item => {
-      const itemDate = format(new Date(item.createdAt), 'yyyy-MM-dd');
+      const itemDate = getGmt7DateString(new Date(item.createdAt));
       return itemDate < todayStr;
     });
     
