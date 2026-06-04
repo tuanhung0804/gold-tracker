@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 
 const storage = new Storage();
-const BUCKET_NAME = process.env.GCS_BUCKET_NAME || 'GOLD_TRACKER_IMAGE';
+const BUCKET_NAME = process.env.GCS_BUCKET_NAME || 'gold_tracker_image';
 
 export const getGalleryImages = async (): Promise<string[]> => {
   try {
