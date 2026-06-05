@@ -22,6 +22,15 @@ const comfortaa = Comfortaa({
 export const metadata: Metadata = {
   title: "Sổ vàng của bé Linh",
   description: "Quản lý danh mục đầu tư và theo dõi giá vàng Ngọc Của",
+  manifest: "/manifest.json",
+  icons: {
+    apple: "/apple-touch-icon.png",
+  },
+  other: {
+    "apple-mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-status-bar-style": "default",
+    "apple-mobile-web-app-title": "Bé Linh",
+  },
 };
 
 export default function RootLayout({
