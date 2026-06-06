@@ -35,7 +35,7 @@ declare global {
 globalThis.goldPriceCache = globalThis.goldPriceCache ?? null;
 globalThis.isGoldPriceRevalidating = globalThis.isGoldPriceRevalidating ?? false;
 
-const CACHE_TTL_MS = 2 * 60 * 1000; // 2 minutes
+const CACHE_TTL_MS = 1 * 60 * 1000; // 1 minute
 
 // Scrape Nhẫn SJC and Vàng thế giới from giavang.net API
 async function scrapeGiaVangData(): Promise<{ sjcRing: GiaVangPriceInfo | null; worldGold: GiaVangPriceInfo | null } | null> {
