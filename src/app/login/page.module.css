@@ -373,9 +373,9 @@
 
 .polaroidRibbon {
   position: absolute;
-  top: -16px;
-  right: -20px;
-  width: 130px;
+  top: -37px;
+  right: -47px;
+  width: 300px;
   height: auto;
   pointer-events: none;
   z-index: 6;
