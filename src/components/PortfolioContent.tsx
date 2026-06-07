@@ -660,11 +660,11 @@ export default function PortfolioContent() {
       <style jsx global>{`
         @keyframes slideIn {
           from { transform: translateY(20px); opacity: 0; }
-          to { transform: translateY(0); opacity: 1; }
+          to { transform: none; opacity: 1; }
         }
         @keyframes scaleUp {
           from { transform: scale(0.95); opacity: 0; }
-          to { transform: scale(1); opacity: 1; }
+          to { transform: none; opacity: 1; }
         }
       `}</style>
     </div>
