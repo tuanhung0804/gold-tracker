@@ -441,6 +441,7 @@ a {
   z-index: 10;
   box-shadow: 0 1px 0 var(--border-color);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .scrollable-table-container tbody tr.summary-row td {
@@ -451,6 +452,7 @@ a {
   border-top: 2px dashed var(--gold-primary);
   box-shadow: 0 -1px 0 var(--border-color);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .post-login-bg main {

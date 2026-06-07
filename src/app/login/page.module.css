@@ -21,9 +21,7 @@
 
 /* Central rounded glassmorphic card */
 .mainLoginCard {
-  background: var(--bg-surface);
-  backdrop-filter: var(--backdrop-blur);
-  -webkit-backdrop-filter: var(--backdrop-blur);
+  position: relative;
   border: var(--glass-border);
   border-radius: var(--radius-md); /* 24px */
   box-shadow: var(--shadow-card);
@@ -33,7 +31,22 @@
   max-width: 440px;
   box-sizing: border-box;
   overflow: visible; /* let Polaroid overflow on mobile */
-  position: relative;
+  z-index: 1;
+}
+
+.mainLoginCard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg-surface);
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  border-radius: inherit;
+  z-index: -1;
+  pointer-events: none;
 }
 
 @media (min-width: 1024px) {
