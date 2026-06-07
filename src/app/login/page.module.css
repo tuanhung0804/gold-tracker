@@ -494,3 +494,149 @@
   .desktopHeartsContainer .heart11 { top: 410px; left: 45%; font-size: 1.6rem; transform: rotate(-8deg); animation-delay: 1.3s; }
   .desktopHeartsContainer .heart12 { top: 460px; left: 12%; font-size: 1.4rem; transform: rotate(14deg); animation-delay: 0.2s; }
 }
+
+.giftButton {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 50;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff7c95 0%, #ff527b 100%);
+  border: 2px solid #ffffff;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(255, 124, 149, 0.4);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+  animation: giftBounce 2s infinite;
+}
+
+.giftButton:hover {
+  transform: scale(1.1);
+  box-shadow: 0 12px 30px rgba(255, 124, 149, 0.6);
+  animation: giftShake 0.5s ease infinite;
+}
+
+.giftIcon {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 124, 149, 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  animation: fadeIn 0.3s ease;
+  padding: 1.5rem;
+}
+
+.modalContent {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 124, 149, 0.3);
+  border-radius: 24px;
+  padding: 2.5rem 2rem;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(255, 124, 149, 0.25);
+  animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.modalHeart {
+  font-size: 3rem;
+  animation: heartPulse 1.5s ease infinite;
+}
+
+.modalMessage {
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.6;
+  color: #d84b64;
+  margin: 0;
+}
+
+.modalButton {
+  background: linear-gradient(135deg, #ff7c95 0%, #ff527b 100%);
+  color: white;
+  border: none;
+  padding: 0.85rem 2.5rem;
+  border-radius: 50px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(255, 124, 149, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.modalButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255, 124, 149, 0.5);
+}
+
+.modalButton:active {
+  transform: translateY(0);
+}
+
+@keyframes giftBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes giftShake {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-8deg); }
+  75% { transform: rotate(8deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes heartPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+@media (max-width: 480px) {
+  .giftButton {
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 50px;
+    height: 50px;
+  }
+  .modalContent {
+    padding: 2rem 1.5rem;
+  }
+}
