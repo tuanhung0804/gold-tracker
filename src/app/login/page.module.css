@@ -352,6 +352,7 @@
 }
 
 .pageRibbonCorner {
+  display: none;
   position: absolute;
   top: 0;
   right: 0;
@@ -363,10 +364,21 @@
 
 @media (min-width: 1024px) {
   .pageRibbonCorner {
+    display: block;
     width: 480px;
     top: calc(50% - 360px);
     right: calc(50% - 555px);
   }
+}
+
+.polaroidRibbon {
+  position: absolute;
+  top: -14px;
+  right: -17px;
+  width: 110px;
+  height: auto;
+  pointer-events: none;
+  z-index: 6;
 }
 
 .desktopHeartsContainer {

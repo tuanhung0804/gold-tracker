@@ -205,6 +205,12 @@ export default function LoginPage() {
                 />
               )}
             </div>
+            {/* Transparent corner ribbon hugging the frame */}
+            <img 
+              src="/assets/ribbon-corner.png" 
+              alt="Ribbon Corner Accent" 
+              className={styles.polaroidRibbon} 
+            />
           </div>
 
           <h1 className={`heading-gradient ${styles.siteTitle}`}>Sổ vàng của bé Linh</h1>
