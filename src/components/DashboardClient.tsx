@@ -293,7 +293,7 @@ export default function DashboardClient({ initialLivePrice, initialPortfolio }: 
         </div>
 
         {/* Card 2: Vàng Nhẫn SJC 99.99% */}
-        <div className="glass-card animate-fade-in" style={{ animationDelay: '0.15s' }}>
+        <div className="glass-card">
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
             <div style={{ background: 'var(--gold-glow)', padding: '10px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '44px', height: '44px' }}>
               <img src="/sjc-logo.png" alt="SJC Logo" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
@@ -357,7 +357,7 @@ export default function DashboardClient({ initialLivePrice, initialPortfolio }: 
         </div>
 
         {/* Card 3: Vàng thế giới */}
-        <div className="glass-card animate-fade-in" style={{ animationDelay: '0.3s' }}>
+        <div className="glass-card">
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
             <div style={{ background: 'var(--gold-glow)', padding: '10px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '44px', height: '44px' }}>
               <img src="/world-logo.png" alt="World Logo" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
