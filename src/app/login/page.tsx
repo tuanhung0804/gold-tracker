@@ -143,7 +143,7 @@ export default function LoginPage() {
     <div className={styles.loginPageWrapper}>
       {/* Page corner ribbon decoration */}
       <img 
-        src="/assets/ribbon-corner.jpg" 
+        src="/assets/ribbon-corner.png" 
         alt="Ribbon Corner Accent" 
         className={styles.pageRibbonCorner} 
       />

@@ -359,8 +359,6 @@
   height: auto;
   pointer-events: none;
   z-index: 10;
-  mix-blend-mode: multiply;
-  filter: contrast(1.18) brightness(1.04);
 }
 
 @media (min-width: 1024px) {
