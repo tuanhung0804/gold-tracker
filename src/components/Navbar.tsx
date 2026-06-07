@@ -68,7 +68,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav style={{ padding: '20px 0', borderBottom: '1px solid var(--border-color)', background: 'var(--bg-surface)', backdropFilter: 'var(--backdrop-blur)' }}>
+    <nav style={{ padding: '20px 0', borderBottom: '1px solid var(--border-color)', background: 'var(--bg-surface)', backdropFilter: 'var(--backdrop-blur)', WebkitBackdropFilter: 'var(--backdrop-blur)' }}>
       <div className="navbar-container container">
         <a href="#" onClick={(e) => handleTabClick(e, '')}>
           <h1 className="heading-gradient" style={{ fontSize: '1.5rem', margin: 0, cursor: 'pointer', textShadow: '0 0 10px var(--gold-glow)' }}>

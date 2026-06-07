@@ -21,7 +21,7 @@ const CandlestickTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     return (
-      <div style={{ background: 'rgba(255, 255, 255, 0.95)', border: '1px solid rgba(255, 124, 149, 0.35)', borderRadius: '16px', padding: '12px 16px', backdropFilter: 'blur(10px)', boxShadow: 'var(--shadow-card)', fontSize: '0.85rem', color: 'var(--text-primary)' }}>
+      <div style={{ background: 'rgba(255, 255, 255, 0.95)', border: '1px solid rgba(255, 124, 149, 0.35)', borderRadius: '16px', padding: '12px 16px', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', boxShadow: 'var(--shadow-card)', fontSize: '0.85rem', color: 'var(--text-primary)' }}>
         <p style={{ color: 'var(--text-secondary)', fontWeight: 600, marginBottom: '6px' }}>{data.dateFormatted}</p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', gap: '20px' }}>
@@ -51,7 +51,7 @@ const SpreadTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     return (
-      <div style={{ background: 'rgba(255, 255, 255, 0.95)', border: '1px solid rgba(255, 124, 149, 0.35)', borderRadius: '16px', padding: '8px 12px', backdropFilter: 'blur(10px)', boxShadow: 'var(--shadow-card)', fontSize: '0.85rem', color: 'var(--text-primary)' }}>
+      <div style={{ background: 'rgba(255, 255, 255, 0.95)', border: '1px solid rgba(255, 124, 149, 0.35)', borderRadius: '16px', padding: '8px 12px', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', boxShadow: 'var(--shadow-card)', fontSize: '0.85rem', color: 'var(--text-primary)' }}>
         <p style={{ color: 'var(--text-secondary)', fontWeight: 600, marginBottom: '4px' }}>{data.dateFormatted}</p>
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: '20px' }}>
           <span style={{ color: 'var(--text-secondary)' }}>Chênh lệch (spread):</span>
@@ -351,7 +351,7 @@ export default function HistoryContent() {
                   />
                   <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" vertical={false} opacity={0.5} />
                   <Tooltip 
-                    contentStyle={{ background: 'rgba(255, 255, 255, 0.95)', border: '1px solid rgba(255, 124, 149, 0.35)', borderRadius: '16px', backdropFilter: 'blur(10px)', boxShadow: 'var(--shadow-card)' }}
+                    contentStyle={{ background: 'rgba(255, 255, 255, 0.95)', border: '1px solid rgba(255, 124, 149, 0.35)', borderRadius: '16px', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', boxShadow: 'var(--shadow-card)' }}
                     itemStyle={{ color: 'var(--text-primary)' }}
                     labelStyle={{ color: 'var(--text-secondary)', fontWeight: 600, marginBottom: '6px' }}
                     formatter={(value: unknown) => [formatMoney(Number(value)), '']}

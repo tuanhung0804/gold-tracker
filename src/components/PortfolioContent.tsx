@@ -501,6 +501,7 @@ export default function PortfolioContent() {
           alignItems: 'center',
           zIndex: 1000,
           backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
           padding: '16px'
         }}>
           <div className="glass-card" style={{
@@ -642,6 +643,7 @@ export default function PortfolioContent() {
           alignItems: 'center',
           gap: '12px',
           backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
           animation: 'slideIn 0.3s ease-out forwards',
           color: 'var(--text-primary)',
           maxWidth: '400px'
