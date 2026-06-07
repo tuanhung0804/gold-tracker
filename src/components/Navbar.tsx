@@ -11,7 +11,14 @@ export default function Navbar() {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      setIsVerified(sessionStorage.getItem('pin_verified') === 'true');
+      const verified = sessionStorage.getItem('pin_verified') === 'true';
+      setIsVerified(verified);
+      
+      if (verified && pathname !== '/login') {
+        document.body.classList.add('post-login-bg');
+      } else {
+        document.body.classList.remove('post-login-bg');
+      }
     }
   }, [pathname]);
 

@@ -141,10 +141,32 @@ export default function LoginPage() {
 
   return (
     <div className={styles.loginPageWrapper}>
+      {/* Page corner ribbon decoration */}
+      <img 
+        src="/assets/ribbon-corner.jpg" 
+        alt="Ribbon Corner Accent" 
+        className={styles.pageRibbonCorner} 
+      />
+
       {/* Central rounded glassmorphic card */}
       <div className={styles.mainLoginCard}>
         {/* Left Column: cylinder push slideshow (desktop-only via css display rules) */}
         <div className={styles.slideshowColumn}>
+          {/* Floating Hearts for Desktop (outside overflow hidden wrapper) */}
+          <div className={styles.desktopHeartsContainer}>
+            <div className={`${styles.heart} ${styles.heart1}`}>♥</div>
+            <div className={`${styles.heart} ${styles.heart2}`}>♥</div>
+            <div className={`${styles.heart} ${styles.heart3}`}>♥</div>
+            <div className={`${styles.heart} ${styles.heart4}`}>♥</div>
+            <div className={`${styles.heart} ${styles.heart5}`}>♥</div>
+            <div className={`${styles.heart} ${styles.heart6}`}>♥</div>
+            <div className={`${styles.heart} ${styles.heart7}`}>♥</div>
+            <div className={`${styles.heart} ${styles.heart8}`}>♥</div>
+            <div className={`${styles.heart} ${styles.heart9}`}>♥</div>
+            <div className={`${styles.heart} ${styles.heart10}`}>♥</div>
+            <div className={`${styles.heart} ${styles.heart11}`}>♥</div>
+            <div className={`${styles.heart} ${styles.heart12}`}>♥</div>
+          </div>
           <div className={styles.slideshowWrapper}>
             {GALLERY_MEMORIES.map((memory, index) => {
               const slideClass = getSlideClass(index);
@@ -165,6 +187,14 @@ export default function LoginPage() {
         <div className={styles.formColumn}>
           {/* Mobile-only singular polaroid frame */}
           <div className={styles.polaroidFrame}>
+            {/* Floating Hearts for Mobile */}
+            <div className={`${styles.heart} ${styles.heart1}`}>♥</div>
+            <div className={`${styles.heart} ${styles.heart2}`}>♥</div>
+            <div className={`${styles.heart} ${styles.heart3}`}>♥</div>
+            <div className={`${styles.heart} ${styles.heart4}`}>♥</div>
+            <div className={`${styles.heart} ${styles.heart5}`}>♥</div>
+            <div className={`${styles.heart} ${styles.heart6}`}>♥</div>
+            <div className={`${styles.heart} ${styles.heart7}`}>♥</div>
             <div className={styles.polaroidWrapper}>
               {randomImage && (
                 <img 

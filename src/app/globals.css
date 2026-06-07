@@ -410,3 +410,21 @@ a {
   box-shadow: 0 -1px 0 var(--border-color);
   backdrop-filter: blur(8px);
 }
+
+.post-login-bg main {
+  position: relative;
+}
+
+.post-login-bg main::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('/assets/ribbon-pattern.jpg');
+  background-repeat: repeat;
+  opacity: 0.2; /* Visible and subtle, not distracting */
+  z-index: -1;
+  pointer-events: none;
+}
