@@ -45,7 +45,7 @@ export async function updateGiftMessage(message: string) {
       update: { value: message },
       create: { key: 'gift_message', value: message }
     });
-    revalidatePath('/admin/lockouts');
+    revalidatePath('/login');
     return { success: true };
   } catch (error) {
     console.error('Failed to update gift message:', error);

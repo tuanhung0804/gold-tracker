@@ -11,7 +11,7 @@ interface RateLimitItem {
   attempts: number;
   userAgent: string | null;
   isLocked: boolean;
-  updatedAt: Date;
+  updatedAt: string;
 }
 
 interface LockoutsAdminClientProps {
@@ -59,6 +59,7 @@ export default function LockoutsAdminClient({
       {/* Tabs */}
       <div className={styles.tabContainer}>
         <button
+          type="button"
           className={`${styles.tabBtn} ${activeTab === 'lockouts' ? styles.tabBtnActive : ''}`}
           onClick={() => {
             setActiveTab('lockouts');
@@ -69,6 +70,7 @@ export default function LockoutsAdminClient({
           Quản lý IP khóa ({lockedCount})
         </button>
         <button
+          type="button"
           className={`${styles.tabBtn} ${activeTab === 'gift' ? styles.tabBtnActive : ''}`}
           onClick={() => {
             setActiveTab('gift');

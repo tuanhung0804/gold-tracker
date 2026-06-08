@@ -7,9 +7,14 @@ import LockoutsAdminClient from './LockoutsAdminClient';
 export const dynamic = 'force-dynamic';
 
 export default async function LockoutsAdminPage() {
-  const lockouts = await prisma.rateLimit.findMany({
+  const rawLockouts = await prisma.rateLimit.findMany({
     orderBy: { updatedAt: 'desc' }
   });
+
+  const lockouts = rawLockouts.map(item => ({
+    ...item,
+    updatedAt: item.updatedAt.toISOString()
+  }));
 
   const config = await prisma.systemConfig.findUnique({
     where: { key: 'gift_message' }
