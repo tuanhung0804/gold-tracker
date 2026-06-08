@@ -245,7 +245,7 @@ export default function HistoryContent() {
       return sum;
     }, 0);
 
-    const portfolioValue = activeQuantity * point.sellPrice;
+    const portfolioValue = activeQuantity * point.buyPrice;
 
     // Check if there was any purchase on this calendar day
     const isPurchaseDay = portfolio.some(item => {
