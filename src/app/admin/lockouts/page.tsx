@@ -17,9 +17,9 @@ export default async function LockoutsAdminPage() {
   }));
 
   const config = await prisma.systemConfig.findUnique({
-    where: { key: 'gift_message' }
+    where: { key: 'message' }
   });
-  const giftMessage = config?.value || "Anh xin lỗi bé nhiều nhiều. Em yêu mau hết cáu anh nha. Anh yêu em nhiều ❤️";
+  const message = config?.value || "Anh xin lỗi bé nhiều nhiều. Em yêu mau hết cáu anh nha. Anh yêu em nhiều ❤️";
 
   return (
     <div className={styles.container}>
@@ -39,7 +39,7 @@ export default async function LockoutsAdminPage() {
         </Link>
       </div>
 
-      <LockoutsAdminClient initialLockouts={lockouts} initialGiftMessage={giftMessage} />
+      <LockoutsAdminClient initialLockouts={lockouts} initialMessage={message} />
 
     </div>
   );

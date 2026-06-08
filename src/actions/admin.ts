@@ -33,7 +33,7 @@ export async function unblockIp(ip: string) {
   }
 }
 
-export async function updateGiftMessage(message: string) {
+export async function updateMessage(message: string) {
   const isAdmin = await checkAdmin();
   if (!isAdmin) {
     return { error: 'Unauthorized' };
@@ -41,14 +41,14 @@ export async function updateGiftMessage(message: string) {
 
   try {
     await prisma.systemConfig.upsert({
-      where: { key: 'gift_message' },
+      where: { key: 'message' },
       update: { value: message },
-      create: { key: 'gift_message', value: message }
+      create: { key: 'message', value: message }
     });
     revalidatePath('/login');
     return { success: true };
   } catch (error) {
-    console.error('Failed to update gift message:', error);
+    console.error('Failed to update message:', error);
     return { error: 'Database error' };
   }
 }

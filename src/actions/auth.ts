@@ -102,14 +102,14 @@ export async function logout() {
   cookieStore.delete('session');
 }
 
-export async function getGiftMessage() {
+export async function getMessage() {
   try {
     const config = await prisma.systemConfig.findUnique({
-      where: { key: 'gift_message' }
+      where: { key: 'message' }
     });
     return config?.value || "Anh xin lỗi bé nhiều nhiều. Em yêu mau hết cáu anh nha. Anh yêu em nhiều ❤️";
   } catch (error) {
-    console.error('Failed to get gift message:', error);
+    console.error('Failed to get message:', error);
     return "Anh xin lỗi bé nhiều nhiều. Em yêu mau hết cáu anh nha. Anh yêu em nhiều ❤️";
   }
 }

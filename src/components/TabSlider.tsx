@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import DashboardClient from './DashboardClient';
 import PortfolioContent from './PortfolioContent';
 import HistoryContent from './HistoryContent';
+import { getMessage } from '@/actions/auth';
 
 interface GiaVangPriceInfo {
   name: string;
@@ -42,6 +43,16 @@ export default function TabSlider({ initialLivePrice, initialPortfolio }: TabSli
   const [activeTab, setActiveTab] = useState(0);
   const [dragOffset, setDragOffset] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  
+  const [showMessageDialog, setShowMessageDialog] = useState(false);
+  const [message, setMessage] = useState("Anh xin lỗi bé nhiều nhiều. Em yêu mau hết cáu anh nha. Anh yêu em nhiều ❤️");
+
+  // Fetch the message from the backend on mount
+  useEffect(() => {
+    getMessage().then((msg) => {
+      if (msg) setMessage(msg);
+    });
+  }, []);
 
   const router = useRouter();
 
@@ -285,6 +296,38 @@ export default function TabSlider({ initialLivePrice, initialPortfolio }: TabSli
           <HistoryContent />
         </div>
       </div>
+
+      {/* Floating Message Button */}
+      <button 
+        className="floating-message-btn" 
+        onClick={() => setShowMessageDialog(true)}
+        aria-label="Tin nhắn gửi bé"
+      >
+        <img 
+          src="/assets/message-icon.png" 
+          alt="Tin nhắn gửi bé" 
+          className="floating-message-img" 
+        />
+      </button>
+
+      {/* Message Dialog */}
+      {showMessageDialog && (
+        <div className="message-modal-overlay" onClick={() => setShowMessageDialog(false)}>
+          <div className="message-modal-content" onClick={(e) => e.stopPropagation()}>
+            <img 
+              src="/assets/message-icon.png" 
+              alt="Message" 
+              className="message-modal-icon" 
+            />
+            <p className="message-modal-text">
+              {message}
+            </p>
+            <button className="message-modal-close-btn" onClick={() => setShowMessageDialog(false)}>
+              OK anh yêu
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

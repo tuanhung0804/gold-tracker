@@ -472,3 +472,162 @@ a {
   z-index: -1;
   pointer-events: none;
 }
+
+/* Floating Message Icon & Modal */
+.floating-message-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 50;
+  width: 70px;
+  height: 70px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.3s ease;
+  filter: drop-shadow(0 8px 16px rgba(255, 124, 149, 0.3));
+  animation: messageIconBounce 2.5s infinite;
+  outline: none;
+}
+
+.floating-message-btn:hover {
+  transform: scale(1.15);
+  filter: drop-shadow(0 12px 24px rgba(255, 124, 149, 0.5));
+  animation: messageIconShake 0.6s ease infinite;
+}
+
+.floating-message-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.message-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 124, 149, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000; /* High z-index to overlay everything including navbar */
+  animation: messageFadeIn 0.3s ease;
+  padding: 1.5rem;
+}
+
+.message-modal-content {
+  background: rgba(255, 255, 255, 0.96);
+  border: 1.5px solid rgba(255, 124, 149, 0.28);
+  border-radius: 24px;
+  padding: 2.5rem 2rem;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 24px 64px rgba(216, 75, 100, 0.18);
+  animation: messageSlideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  position: relative;
+}
+
+.message-modal-icon {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 12px rgba(255, 124, 149, 0.25));
+  animation: messageHeartPulse 1.8s ease infinite;
+}
+
+.message-modal-text {
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.6;
+  color: #d84b64;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.message-modal-close-btn {
+  background: linear-gradient(135deg, #ff7c95 0%, #ff527b 100%);
+  color: white;
+  border: none;
+  padding: 0.85rem 3rem;
+  border-radius: 50px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(255, 124, 149, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+}
+
+.message-modal-close-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255, 124, 149, 0.55);
+}
+
+.message-modal-close-btn:active {
+  transform: translateY(0);
+}
+
+@keyframes messageIconBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes messageIconShake {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-6deg); }
+  75% { transform: rotate(6deg); }
+}
+
+@keyframes messageFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes messageSlideUp {
+  from {
+    transform: translateY(32px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes messageHeartPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+@media (max-width: 480px) {
+  .floating-message-btn {
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 58px;
+    height: 58px;
+  }
+  .message-modal-content {
+    padding: 2rem 1.5rem;
+  }
+  .message-modal-icon {
+    width: 80px;
+    height: 80px;
+  }
+}

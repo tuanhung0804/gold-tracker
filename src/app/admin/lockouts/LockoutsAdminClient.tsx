@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { ShieldAlert, Unlock, Gift, Save, CheckCircle, AlertTriangle } from 'lucide-react';
-import { unblockIp, updateGiftMessage } from '@/actions/admin';
+import { ShieldAlert, Unlock, Mail, Save, CheckCircle, AlertTriangle } from 'lucide-react';
+import { unblockIp, updateMessage } from '@/actions/admin';
 import styles from './page.module.css';
 
 interface RateLimitItem {
@@ -16,16 +16,16 @@ interface RateLimitItem {
 
 interface LockoutsAdminClientProps {
   initialLockouts: RateLimitItem[];
-  initialGiftMessage: string;
+  initialMessage: string;
 }
 
 export default function LockoutsAdminClient({
   initialLockouts,
-  initialGiftMessage
+  initialMessage
 }: LockoutsAdminClientProps) {
-  const [activeTab, setActiveTab] = useState<'lockouts' | 'gift'>('lockouts');
+  const [activeTab, setActiveTab] = useState<'lockouts' | 'message'>('lockouts');
   const [lockouts, setLockouts] = useState<RateLimitItem[]>(initialLockouts);
-  const [giftMessage, setGiftMessage] = useState(initialGiftMessage);
+  const [message, setMessage] = useState(initialMessage);
   const [saveStatus, setSaveStatus] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   
   const [isPending, startTransition] = useTransition();
@@ -43,7 +43,7 @@ export default function LockoutsAdminClient({
     e.preventDefault();
     setSaveStatus(null);
     startTransition(async () => {
-      const res = await updateGiftMessage(giftMessage);
+      const res = await updateMessage(message);
       if (res.success) {
         setSaveStatus({ type: 'success', message: 'Cập nhật tin nhắn thành công!' });
       } else {
@@ -71,14 +71,14 @@ export default function LockoutsAdminClient({
         </button>
         <button
           type="button"
-          className={`${styles.tabBtn} ${activeTab === 'gift' ? styles.tabBtnActive : ''}`}
+          className={`${styles.tabBtn} ${activeTab === 'message' ? styles.tabBtnActive : ''}`}
           onClick={() => {
-            setActiveTab('gift');
+            setActiveTab('message');
             setSaveStatus(null);
           }}
         >
-          <Gift size={18} />
-          Tin nhắn hộp quà
+          <Mail size={18} />
+          Tin nhắn gửi bé
         </button>
       </div>
 
@@ -155,19 +155,19 @@ export default function LockoutsAdminClient({
       ) : (
         <div className="glass-panel" style={{ padding: '2rem' }}>
           <div style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Gift size={22} style={{ color: '#ff527b' }} />
-            <h2 style={{ fontSize: '1.25rem', margin: 0, fontWeight: 600 }}>Cấu hình Tin nhắn Hộp Quà</h2>
+            <Mail size={22} style={{ color: '#ff527b' }} />
+            <h2 style={{ fontSize: '1.25rem', margin: 0, fontWeight: 600 }}>Cấu hình Tin nhắn gửi bé</h2>
           </div>
 
           <form onSubmit={handleSaveMessage} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <label htmlFor="gift-message" style={{ fontWeight: 500, fontSize: '0.95rem' }}>
-                Nội dung tin nhắn hiển thị khi click vào hộp quà ở trang đăng nhập:
+              <label htmlFor="message" style={{ fontWeight: 500, fontSize: '0.95rem' }}>
+                Nội dung tin nhắn hiển thị khi click vào icon tin nhắn ở trang giá vàng:
               </label>
               <textarea
-                id="gift-message"
-                value={giftMessage}
-                onChange={(e) => setGiftMessage(e.target.value)}
+                id="message"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
                 placeholder="Nhập lời xin lỗi ngọt ngào..."
                 disabled={isPending}
                 className={styles.messageTextarea}
