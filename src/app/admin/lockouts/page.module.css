@@ -157,3 +157,109 @@
   background: var(--success);
   box-shadow: 0 0 8px var(--success);
 }
+
+.tabContainer {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 0.5rem;
+}
+
+.tabBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tabBtn:hover {
+  background: rgba(255, 255, 255, 0.4);
+  color: var(--text-primary);
+}
+
+.tabBtnActive {
+  background: white;
+  color: var(--gold-dark);
+  box-shadow: 0 4px 12px var(--gold-glow);
+  border: 1px solid var(--border-color);
+}
+
+.messageTextarea {
+  width: 100%;
+  max-width: 100%;
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.6);
+  font-family: inherit;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.messageTextarea:focus {
+  border-color: var(--gold-primary);
+  background: white;
+  box-shadow: 0 0 10px var(--gold-glow);
+}
+
+.saveBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  align-self: flex-start;
+  padding: 12px 32px;
+  border-radius: 50px;
+  background: linear-gradient(135deg, #ff7c95 0%, #ff527b 100%);
+  color: white;
+  border: none;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(255, 124, 149, 0.3);
+  transition: all 0.2s ease;
+}
+
+.saveBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(255, 124, 149, 0.5);
+}
+
+.saveBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.successAlert {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+  background: var(--success-glow);
+  color: var(--success);
+  border: 1px solid rgba(76, 175, 80, 0.2);
+  font-weight: 500;
+}
+
+.errorAlert {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+  background: var(--danger-glow);
+  color: var(--danger);
+  border: 1px solid rgba(244, 67, 54, 0.2);
+  font-weight: 500;
+}

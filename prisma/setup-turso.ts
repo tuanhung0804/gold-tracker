@@ -93,6 +93,17 @@ async function main() {
   `);
   console.log('✅ Created index: RateLimit_ip_key');
 
+  // Create SystemConfig table
+  await client.execute(`
+    CREATE TABLE IF NOT EXISTS "SystemConfig" (
+      "key" TEXT NOT NULL PRIMARY KEY,
+      "value" TEXT NOT NULL,
+      "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      "updatedAt" DATETIME NOT NULL
+    );
+  `);
+  console.log('✅ Created table: SystemConfig');
+
   console.log('🎉 Turso database schema successfully initialized.');
 }
 

@@ -1,8 +1,8 @@
 import prisma from '@/lib/prisma';
-import { ShieldCheck, ShieldAlert, Unlock, ArrowLeft } from 'lucide-react';
-import { unblockIp } from '@/actions/admin';
+import { ShieldCheck, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import styles from './page.module.css';
+import LockoutsAdminClient from './LockoutsAdminClient';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,7 +11,10 @@ export default async function LockoutsAdminPage() {
     orderBy: { updatedAt: 'desc' }
   });
 
-  const lockedCount = lockouts.filter(l => l.isLocked).length;
+  const config = await prisma.systemConfig.findUnique({
+    where: { key: 'gift_message' }
+  });
+  const giftMessage = config?.value || "Anh xin lỗi bé nhiều nhiều. Em yêu mau hết cáu anh nha. Anh yêu em nhiều ❤️";
 
   return (
     <div className={styles.container}>
@@ -23,7 +26,7 @@ export default async function LockoutsAdminPage() {
           </div>
           <div>
             <h1 className={`heading-gradient ${styles.title}`}>Quản trị viên</h1>
-            <p className={styles.subtitle}>Quản lý truy cập và các IP bị khóa</p>
+            <p className={styles.subtitle}>Quản lý truy cập và các cấu hình hệ thống</p>
           </div>
         </div>
         <Link href="/" className={styles.backBtn}>
@@ -31,76 +34,7 @@ export default async function LockoutsAdminPage() {
         </Link>
       </div>
 
-      <div className="glass-panel" style={{ overflow: 'hidden' }}>
-        <div className={styles.tableHeader}>
-          <h2 className={styles.tableTitle}>
-            <ShieldAlert className="text-red-500" size={20} style={{ color: 'var(--danger)' }} /> Danh sách IP truy cập
-          </h2>
-          <span className={styles.lockedBadge}>
-            {lockedCount} bị khóa
-          </span>
-        </div>
-        
-        <div className={styles.tableWrapper}>
-          <table className="premium-table">
-            <thead>
-              <tr>
-                <th>IP Address</th>
-                <th>Thiết bị (User-Agent)</th>
-                <th>Số lần thử</th>
-                <th>Trạng thái</th>
-                <th style={{ textAlign: 'right' }}>Thao tác</th>
-              </tr>
-            </thead>
-            <tbody>
-              {lockouts.length === 0 ? (
-                <tr>
-                  <td colSpan={5} style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-                    Chưa có dữ liệu truy cập nào.
-                  </td>
-                </tr>
-              ) : lockouts.map((item) => (
-                <tr key={item.id}>
-                  <td className={styles.ipCell}>{item.ip}</td>
-                  <td className={styles.userAgentCell} title={item.userAgent || ''}>
-                    {item.userAgent || 'Không rõ'}
-                  </td>
-                  <td className="font-numbers" style={{ fontWeight: 600 }}>{item.attempts}</td>
-                  <td>
-                    {item.isLocked ? (
-                      <span className="badge badge-danger">
-                        <span className={styles.statusIndicator}>
-                          <span className={`${styles.dot} ${styles.dotLocked}`}></span>
-                          Bị khóa
-                        </span>
-                      </span>
-                    ) : (
-                      <span className="badge badge-success">
-                        <span className={styles.statusIndicator}>
-                          <span className={`${styles.dot} ${styles.dotSafe}`}></span>
-                          An toàn
-                        </span>
-                      </span>
-                    )}
-                  </td>
-                  <td style={{ textAlign: 'right', padding: '6px 12px' }}>
-                    {item.isLocked && (
-                      <form action={async () => {
-                        'use server';
-                        await unblockIp(item.ip);
-                      }} style={{ display: 'inline-block' }}>
-                        <button type="submit" className={styles.unlockBtn}>
-                          <Unlock size={14} /> Mở khóa
-                        </button>
-                      </form>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <LockoutsAdminClient initialLockouts={lockouts} initialGiftMessage={giftMessage} />
 
     </div>
   );

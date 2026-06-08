@@ -2,7 +2,7 @@
 
 import { useState, useTransition, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { submitPin } from '@/actions/auth';
+import { submitPin, getGiftMessage } from '@/actions/auth';
 import { AlertCircle, Loader2, Gift } from 'lucide-react';
 import styles from './page.module.css';
 import galleryImages from './gallery.json';
@@ -19,6 +19,13 @@ export default function LoginPage() {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [showGiftDialog, setShowGiftDialog] = useState(false);
+  const [giftMessage, setGiftMessage] = useState("Anh xin lỗi bé nhiều nhiều. Em yêu mau hết cáu anh nha. Anh yêu em nhiều ❤️");
+
+  useEffect(() => {
+    getGiftMessage().then((msg) => {
+      if (msg) setGiftMessage(msg);
+    });
+  }, []);
 
   // Gallery images with captions dynamically generated from state
   const GALLERY_MEMORIES = images.map((filename) => ({
@@ -284,7 +291,7 @@ export default function LoginPage() {
           <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
             <div className={styles.modalHeart}>💝</div>
             <p className={styles.modalMessage}>
-              Anh xin lỗi bé nhiều nhiều. Em yêu mau hết cáu anh nha. Anh yêu em nhiều ❤️
+              {giftMessage}
             </p>
             <button className={styles.modalButton} onClick={() => setShowGiftDialog(false)}>
               OK anh yêu

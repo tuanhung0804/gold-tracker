@@ -32,3 +32,23 @@ export async function unblockIp(ip: string) {
     return { error: 'Database error' };
   }
 }
+
+export async function updateGiftMessage(message: string) {
+  const isAdmin = await checkAdmin();
+  if (!isAdmin) {
+    return { error: 'Unauthorized' };
+  }
+
+  try {
+    await prisma.systemConfig.upsert({
+      where: { key: 'gift_message' },
+      update: { value: message },
+      create: { key: 'gift_message', value: message }
+    });
+    revalidatePath('/admin/lockouts');
+    return { success: true };
+  } catch (error) {
+    console.error('Failed to update gift message:', error);
+    return { error: 'Database error' };
+  }
+}
