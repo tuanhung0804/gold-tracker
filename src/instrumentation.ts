@@ -52,6 +52,37 @@ export async function register() {
             });
             console.log('✅ [Automation] Price unchanged. Heartbeat updated.');
           } else {
+            // Price changed, get yesterday's price for comparison
+            const tzOffset = 7 * 60 * 60 * 1000;
+            const todayLocal = new Date(Date.now() + tzOffset);
+            todayLocal.setUTCHours(0, 0, 0, 0);
+            const today = new Date(todayLocal.getTime() - tzOffset);
+            const yesterdayRecord = await prisma.priceHistory.findFirst({
+              where: {
+                name: data.name,
+                createdAt: {
+                  lt: today
+                }
+              },
+              orderBy: { createdAt: 'desc' }
+            });
+            const yesterdayPrice = yesterdayRecord ? yesterdayRecord.buyPrice : (latestRecord ? latestRecord.buyPrice : data.buyPrice);
+
+            // Send push notification
+            try {
+              const { triggerPushNotification } = await import('./lib/push');
+              await triggerPushNotification(
+                data.name,
+                data.buyPrice,
+                data.sellPrice,
+                latestRecord ? latestRecord.buyPrice : data.buyPrice,
+                latestRecord ? latestRecord.sellPrice : data.sellPrice,
+                yesterdayPrice
+              );
+            } catch (pushError) {
+              console.error('❌ [Automation] Failed to send push notification:', pushError);
+            }
+
             // Price changed, insert new record
             const newRecord = await prisma.priceHistory.create({
               data: {

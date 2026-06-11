@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { fetchGoldPrice } from '@/lib/scraper';
 import prisma from '@/lib/prisma';
 import { sendPriceChangeEmail } from '@/lib/email';
+import { triggerPushNotification } from '@/lib/push';
 
 export const dynamic = 'force-dynamic';
 
@@ -145,6 +146,20 @@ export async function GET(request: Request) {
         console.error('Failed to send price change email:', emailError);
       }
 
+      // Send push notification
+      try {
+        await triggerPushNotification(
+          data.name,
+          data.buyPrice,
+          data.sellPrice,
+          latestRecord ? latestRecord.buyPrice : data.buyPrice,
+          latestRecord ? latestRecord.sellPrice : data.sellPrice,
+          yesterdayPrice
+        );
+      } catch (pushError) {
+        console.error('Failed to send push notification:', pushError);
+      }
+
       // Insert new record in database
       await prisma.priceHistory.create({
         data: {
@@ -154,7 +169,7 @@ export async function GET(request: Request) {
         }
       });
       
-      return NextResponse.json({ status: 'New price recorded and email sent for Ngoc Cua, other types updated', data });
+      return NextResponse.json({ status: 'New price recorded, email and push sent for Ngoc Cua, other types updated', data });
     }
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Unknown error';

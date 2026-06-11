@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { TrendingUp, Flower } from 'lucide-react';
+import { TrendingUp, Flower, Bell } from 'lucide-react';
 import { format } from 'date-fns';
 
 interface GiaVangPriceInfo {
@@ -51,9 +51,121 @@ export default function DashboardClient({ initialLivePrice, initialPortfolio }: 
   const [rawHistory, setRawHistory] = useState<PriceHistoryItem[]>([]);
   const [isClient, setIsClient] = useState(false);
 
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [isPushLoading, setIsPushLoading] = useState(false);
+  const [showNotificationBell, setShowNotificationBell] = useState(false);
+
   useEffect(() => {
     setIsClient(true);
+    
+    // Register sw and check subscription on client side
+    if ('serviceWorker' in navigator && 'PushManager' in window) {
+      setShowNotificationBell(true);
+      
+      const checkSubscription = async () => {
+        try {
+          const registration = await navigator.serviceWorker.register('/sw.js?v=2');
+          const subscription = await registration.pushManager.getSubscription();
+          setIsSubscribed(!!subscription);
+        } catch (err) {
+          console.error('Error checking push subscription:', err);
+        }
+      };
+
+      checkSubscription();
+    }
   }, []);
+
+  const urlBase64ToUint8Array = (base64String: string) => {
+    const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+    const base64 = (base64String + padding)
+      .replace(/\-/g, '+')
+      .replace(/_/g, '/');
+
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+
+    for (let i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+  };
+
+  const handleBellClick = async () => {
+    if (isPushLoading) return;
+    setIsPushLoading(true);
+    
+    try {
+      if (isSubscribed) {
+        await unsubscribeUser();
+      } else {
+        await subscribeUser();
+      }
+    } catch (err) {
+      console.error('Push registration error:', err);
+      alert('Có lỗi xảy ra khi thiết lập thông báo.');
+    } finally {
+      setIsPushLoading(false);
+    }
+  };
+
+  const subscribeUser = async () => {
+    const permission = await Notification.requestPermission();
+    if (permission !== 'granted') {
+      alert('Bạn cần cấp quyền thông báo để nhận cập nhật giá vàng.');
+      return;
+    }
+
+    // Register service worker if not already
+    const registration = await navigator.serviceWorker.register('/sw.js?v=2');
+    await navigator.serviceWorker.ready;
+
+    const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+    if (!vapidPublicKey) {
+      console.error('VAPID public key is missing on the client.');
+      return;
+    }
+
+    const subscription = await registration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: urlBase64ToUint8Array(vapidPublicKey),
+    });
+
+    const response = await fetch('/api/push/subscribe', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ subscription, action: 'subscribe' }),
+    });
+
+    if (response.ok) {
+      setIsSubscribed(true);
+      alert('Đăng ký nhận thông báo giá vàng thành công! 🎉');
+    } else {
+      throw new Error('Subscription API returned error');
+    }
+  };
+
+  const unsubscribeUser = async () => {
+    const registration = await navigator.serviceWorker.ready;
+    const subscription = await registration.pushManager.getSubscription();
+
+    if (subscription) {
+      await subscription.unsubscribe();
+
+      await fetch('/api/push/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ subscription, action: 'unsubscribe' }),
+      });
+    }
+
+    setIsSubscribed(false);
+    alert('Đã hủy nhận thông báo giá vàng.');
+  };
 
   // Poll live price every 60 seconds
   useEffect(() => {
@@ -201,6 +313,32 @@ export default function DashboardClient({ initialLivePrice, initialPortfolio }: 
           <h1 className="heading-gradient page-title" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <Flower size={32} style={{ color: 'var(--gold-primary)', filter: 'drop-shadow(0 0 6px var(--gold-glow))' }} />
             Giá vàng hôm nay
+            {showNotificationBell && (
+              <button 
+                onClick={handleBellClick}
+                disabled={isPushLoading}
+                style={{
+                  cursor: 'pointer',
+                  padding: '4px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: isSubscribed ? 'var(--gold-primary)' : 'var(--text-secondary)',
+                  filter: isSubscribed ? 'drop-shadow(0 0 6px var(--gold-glow))' : 'none',
+                  transition: 'all 0.3s ease',
+                  marginLeft: '8px',
+                  borderRadius: '50%',
+                  background: 'rgba(255, 255, 255, 0.3)',
+                  border: '1px solid var(--border-color)',
+                  boxShadow: 'var(--shadow-card)',
+                  width: '36px',
+                  height: '36px'
+                }}
+                title={isSubscribed ? "Hủy đăng ký nhận thông báo" : "Đăng ký nhận thông báo khi giá vàng thay đổi"}
+              >
+                <Bell size={20} className={isPushLoading ? 'animate-spin' : ''} />
+              </button>
+            )}
           </h1>
           <p style={{ color: 'var(--text-secondary)', fontStyle: 'italic', fontSize: '0.9rem' }}>"Vàng lên thì vui vì tài sản tăng giá. Vàng xuống thì vui vì được mua thêm vàng." - Tuấn Hưng</p>
         </div>
