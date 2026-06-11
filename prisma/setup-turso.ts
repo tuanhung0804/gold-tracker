@@ -104,6 +104,25 @@ async function main() {
   `);
   console.log('✅ Created table: SystemConfig');
 
+  // Create PushSubscription table
+  await client.execute(`
+    CREATE TABLE IF NOT EXISTS "PushSubscription" (
+      "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+      "endpoint" TEXT NOT NULL UNIQUE,
+      "p256dh" TEXT NOT NULL,
+      "auth" TEXT NOT NULL,
+      "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      "updatedAt" DATETIME NOT NULL
+    );
+  `);
+  console.log('✅ Created table: PushSubscription');
+
+  // Create unique index on PushSubscription.endpoint
+  await client.execute(`
+    CREATE UNIQUE INDEX IF NOT EXISTS "PushSubscription_endpoint_key" ON "PushSubscription"("endpoint");
+  `);
+  console.log('✅ Created index: PushSubscription_endpoint_key');
+
   console.log('🎉 Turso database schema successfully initialized.');
 }
 
