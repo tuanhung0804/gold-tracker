@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <!-- Outer Outline (thick dark brown/black border) -->
+  <path d="M 50,35 
+           C 42,22 28,20 22,32 
+           C 16,40 10,52 20,62 
+           C 28,70 38,86 50,90 
+           C 62,86 72,70 80,62 
+           C 90,52 84,40 78,32 
+           C 72,20 58,22 50,35 Z" 
+        fill="#ff9ebb" 
+        stroke="#281b17" 
+        stroke-width="8" 
+        stroke-linejoin="round" />
+  
+  <!-- Highlights (White brush strokes) -->
+  <!-- Top Left highlight -->
+  <path d="M 38,25 
+           C 28,26 22,32 20,44" 
+        fill="none" 
+        stroke="#ffffff" 
+        stroke-width="5" 
+        stroke-linecap="round" />
+  
+  <!-- Top Right highlight -->
+  <path d="M 64,26 
+           C 70,28 73,31 74,38" 
+        fill="none" 
+        stroke="#ffffff" 
+        stroke-width="5" 
+        stroke-linecap="round" />
+  
+  <!-- Bottom Right highlight -->
+  <path d="M 46,80 
+           C 56,81 66,76 72,66" 
+        fill="none" 
+        stroke="#ffffff" 
+        stroke-width="5" 
+        stroke-linecap="round" />
+</svg>
