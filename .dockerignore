@@ -1,7 +1,7 @@
 node_modules
 .next
 out
-.env
+# .env removed from ignore to allow build-time NEXT_PUBLIC variables
 .env.local
 .git
 README.md

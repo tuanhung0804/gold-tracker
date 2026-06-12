@@ -105,6 +105,30 @@ export default function DashboardClient({ initialLivePrice, initialPortfolio }: 
       .replace(/=+$/, '');
   };
 
+  const waitForActive = (reg: ServiceWorkerRegistration) => {
+    if (reg.active) return Promise.resolve();
+    
+    return new Promise<void>((resolve) => {
+      const timeout = setTimeout(() => {
+        console.warn('Timeout waiting for service worker to activate');
+        resolve();
+      }, 3000);
+      
+      const worker = reg.installing || reg.waiting;
+      if (worker) {
+        worker.addEventListener('statechange', (e: any) => {
+          if (e.target.state === 'activated') {
+            clearTimeout(timeout);
+            resolve();
+          }
+        });
+      } else {
+        clearTimeout(timeout);
+        resolve();
+      }
+    });
+  };
+
   const handleBellClick = async () => {
     if (isPushLoading) return;
     setIsPushLoading(true);
@@ -124,19 +148,28 @@ export default function DashboardClient({ initialLivePrice, initialPortfolio }: 
   };
 
   const subscribeUser = async () => {
-    const permission = await Notification.requestPermission();
+    let permission: NotificationPermission;
+    try {
+      permission = await Notification.requestPermission();
+    } catch (e) {
+      permission = await new Promise<NotificationPermission>((resolve) => {
+        Notification.requestPermission((p) => resolve(p));
+      });
+    }
+
     if (permission !== 'granted') {
       alert('Bạn cần cấp quyền thông báo để nhận cập nhật giá vàng.');
       return;
     }
 
-    // Register service worker if not already
+    // Register service worker
     const registration = await navigator.serviceWorker.register('/sw.js?v=2');
-    await navigator.serviceWorker.ready;
+    await waitForActive(registration);
 
     const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
     if (!vapidPublicKey) {
       console.error('VAPID public key is missing on the client.');
+      alert('Không tìm thấy mã VAPID public key trên client.');
       return;
     }
 
@@ -170,7 +203,8 @@ export default function DashboardClient({ initialLivePrice, initialPortfolio }: 
   };
 
   const unsubscribeUser = async () => {
-    const registration = await navigator.serviceWorker.ready;
+    const registration = await navigator.serviceWorker.register('/sw.js?v=2');
+    await waitForActive(registration);
     const subscription = await registration.pushManager.getSubscription();
 
     if (subscription) {
