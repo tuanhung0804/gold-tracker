@@ -176,7 +176,7 @@ export default function HistoryContent() {
         const diffYest = newBuy - (yesterdayPrice || lastBuy);
 
         const getTrendSymbol = (val: number) => {
-          return val > 0 ? '🔺' : (val < 0 ? '🔻' : '➖');
+          return val > 0 ? '▲' : (val < 0 ? '▼' : '➖');
         };
 
         const formatVnd = (val: number) => {
@@ -448,9 +448,30 @@ export default function HistoryContent() {
                     </span>
                   </div>
                   <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.5, display: 'flex', flexDirection: 'column', gap: '4px', paddingLeft: '26px' }}>
-                    {notif.body.map((line, idx) => (
-                      <p key={idx} style={{ margin: 0, fontWeight: idx === 0 ? 600 : 400, color: idx === 0 ? 'var(--text-primary)' : 'var(--text-secondary)' }}>{line}</p>
-                    ))}
+                    {notif.body.map((line, idx) => {
+                      const isHeader = idx === 0;
+                      if (line.includes('▲')) {
+                        const parts = line.split('▲');
+                        return (
+                          <p key={idx} style={{ margin: 0, fontWeight: isHeader ? 600 : 400, color: isHeader ? 'var(--text-primary)' : 'var(--text-secondary)' }}>
+                            {parts[0]}<span style={{ color: '#10B981', fontWeight: 600 }}>▲{parts[1]}</span>
+                          </p>
+                        );
+                      }
+                      if (line.includes('▼')) {
+                        const parts = line.split('▼');
+                        return (
+                          <p key={idx} style={{ margin: 0, fontWeight: isHeader ? 600 : 400, color: isHeader ? 'var(--text-primary)' : 'var(--text-secondary)' }}>
+                            {parts[0]}<span style={{ color: '#EF4444', fontWeight: 600 }}>▼{parts[1]}</span>
+                          </p>
+                        );
+                      }
+                      return (
+                        <p key={idx} style={{ margin: 0, fontWeight: isHeader ? 600 : 400, color: isHeader ? 'var(--text-primary)' : 'var(--text-secondary)' }}>
+                          {line}
+                        </p>
+                      );
+                    })}
                   </div>
                 </div>
               ))}

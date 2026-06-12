@@ -14,6 +14,38 @@ if (vapidPublicKey && vapidPrivateKey) {
   console.warn('⚠️ VAPID keys are missing. Push notifications cannot be sent.');
 }
 
+async function sendSingleNotification(
+  sub: { id: number; endpoint: string; p256dh: string; auth: string },
+  payload: string,
+  options: webpush.RequestOptions
+) {
+  const pushSubscription = {
+    endpoint: sub.endpoint,
+    keys: {
+      p256dh: sub.p256dh,
+      auth: sub.auth,
+    },
+  };
+
+  try {
+    await webpush.sendNotification(pushSubscription, payload, options);
+  } catch (error: any) {
+    // If subscription is expired/invalid, delete it from the database
+    if (error.statusCode === 410 || error.statusCode === 404) {
+      console.log(`🗑️ Deleting invalid/expired push subscription: ${sub.endpoint}`);
+      try {
+        await prisma.pushSubscription.delete({
+          where: { id: sub.id },
+        });
+      } catch (dbErr) {
+        console.error(`❌ Failed to delete expired subscription for ${sub.endpoint}:`, dbErr);
+      }
+    } else {
+      console.error(`❌ Error sending push notification to endpoint ${sub.endpoint}:`, error);
+    }
+  }
+}
+
 export async function triggerPushNotification(
   name: string,
   newBuy: number,
@@ -32,7 +64,7 @@ export async function triggerPushNotification(
   const diffYest = newBuy - yesterdayPrice;
 
   const getTrendSymbol = (val: number) => {
-    return val > 0 ? '🔺' : (val < 0 ? '🔻' : '➖');
+    return val > 0 ? '▲' : (val < 0 ? '▼' : '➖');
   };
 
   const formatVnd = (val: number) => {
@@ -65,33 +97,19 @@ export async function triggerPushNotification(
 
     console.log(`📤 Dispatching push notifications to ${subscriptions.length} clients...`);
 
-    const promises = subscriptions.map(async (sub) => {
-      const pushSubscription = {
-        endpoint: sub.endpoint,
-        keys: {
-          p256dh: sub.p256dh,
-          auth: sub.auth,
-        },
-      };
+    const options: webpush.RequestOptions = {
+      headers: {
+        'Urgency': 'high',
+      },
+      urgency: 'high',
+      TTL: 86400, // 24 hours
+    };
 
-      try {
-        await webpush.sendNotification(pushSubscription, payload);
-      } catch (error: any) {
-        // If subscription is expired/invalid, delete it from the database
-        if (error.statusCode === 410 || error.statusCode === 404) {
-          console.log(`🗑️ Deleting invalid/expired push subscription: ${sub.endpoint}`);
-          await prisma.pushSubscription.delete({
-            where: { id: sub.id },
-          }).catch((dbErr) => {
-            console.error('Failed to delete expired subscription:', dbErr);
-          });
-        } else {
-          console.error(`❌ Error sending push notification to endpoint ${sub.endpoint}:`, error);
-        }
-      }
-    });
+    const promises = subscriptions.map((sub) =>
+      sendSingleNotification(sub, payload, options)
+    );
 
-    await Promise.all(promises);
+    await Promise.allSettled(promises);
     console.log('✅ Push notifications dispatch complete.');
   } catch (dbError) {
     console.error('❌ Failed to fetch subscriptions or dispatch notifications:', dbError);

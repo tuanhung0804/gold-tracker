@@ -1,35 +1,32 @@
 self.addEventListener('push', function(event) {
   if (event.data) {
+    let payload;
     try {
-      const data = event.data.json();
-      const options = {
-        body: data.body,
-        icon: '/notebook-transparent.png',
-        badge: '/notebook-transparent.png',
-        vibrate: [100, 50, 100],
-        data: {
-          url: '/'
-        }
-      };
-      
-      event.waitUntil(
-        self.registration.showNotification(data.title || 'Cập nhật giá vàng', options)
-      );
+      payload = event.data.json();
+      if (!payload || typeof payload !== 'object') {
+        throw new Error('Payload is not a valid object');
+      }
     } catch (err) {
-      // Fallback if data is not JSON
-      const text = event.data.text();
-      event.waitUntil(
-        self.registration.showNotification('Cập nhật giá vàng Ngọc Của', {
-          body: text,
-          icon: '/notebook-transparent.png',
-          badge: '/notebook-transparent.png',
-          vibrate: [100, 50, 100],
-          data: {
-            url: '/'
-          }
-        })
-      );
+      // Fallback if data is not JSON or unexpected structure
+      payload = {
+        title: 'Cập nhật giá vàng Ngọc Của',
+        body: event.data.text()
+      };
     }
+
+    const options = {
+      body: payload.body,
+      icon: '/notebook-transparent.png',
+      badge: '/notebook-transparent.png',
+      vibrate: [100, 50, 100],
+      data: {
+        url: '/'
+      }
+    };
+    
+    event.waitUntil(
+      self.registration.showNotification(payload.title || 'Cập nhật giá vàng', options)
+    );
   }
 });
 
