@@ -91,6 +91,20 @@ export default function DashboardClient({ initialLivePrice, initialPortfolio }: 
     return outputArray;
   };
 
+  const arrayBufferToBase64 = (buffer: ArrayBuffer | null) => {
+    if (!buffer) return '';
+    let binary = '';
+    const bytes = new Uint8Array(buffer);
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary)
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '');
+  };
+
   const handleBellClick = async () => {
     if (isPushLoading) return;
     setIsPushLoading(true);
@@ -131,12 +145,20 @@ export default function DashboardClient({ initialLivePrice, initialPortfolio }: 
       applicationServerKey: urlBase64ToUint8Array(vapidPublicKey),
     });
 
+    const subscriptionData = {
+      endpoint: subscription.endpoint,
+      keys: {
+        p256dh: arrayBufferToBase64(subscription.getKey('p256dh')),
+        auth: arrayBufferToBase64(subscription.getKey('auth'))
+      }
+    };
+
     const response = await fetch('/api/push/subscribe', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ subscription, action: 'subscribe' }),
+      body: JSON.stringify({ subscription: subscriptionData, action: 'subscribe' }),
     });
 
     if (response.ok) {
@@ -154,12 +176,20 @@ export default function DashboardClient({ initialLivePrice, initialPortfolio }: 
     if (subscription) {
       await subscription.unsubscribe();
 
+      const subscriptionData = {
+        endpoint: subscription.endpoint,
+        keys: {
+          p256dh: '',
+          auth: ''
+        }
+      };
+
       await fetch('/api/push/subscribe', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ subscription, action: 'unsubscribe' }),
+        body: JSON.stringify({ subscription: subscriptionData, action: 'unsubscribe' }),
       });
     }
 
