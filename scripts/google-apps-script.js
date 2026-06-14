@@ -242,8 +242,27 @@ function recordGoldPriceHistory() {
     historySheet.getRange(2, 4, finalLastRow - 1, 2).setNumberFormat("yyyy-mm-dd HH:mm:ss");
   }
   // --- NEW: Schedule the next run dynamically ---
+  triggerNextJsCron();
   setDynamicTrigger();
   updateCandlestickData();
+}
+
+function triggerNextJsCron() {
+  var url = "https://gold-tracker-app-479335197996.asia-northeast1.run.app/api/cron/track";
+  var token = "83b0f5223e7486f4cb4c1e8ba3c78a0d";
+  var options = {
+    "method": "get",
+    "headers": {
+      "Authorization": "Bearer " + token
+    },
+    "muteHttpExceptions": true
+  };
+  try {
+    var response = UrlFetchApp.fetch(url, options);
+    Logger.log("Next.js cron triggered: " + response.getContentText());
+  } catch (e) {
+    Logger.log("Failed to trigger Next.js cron: " + e.toString());
+  }
 }
 
 function triggerSentinel() {
