@@ -6,14 +6,24 @@ import { triggerPushNotification } from '@/lib/push';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET(request: Request) {
-  const authHeader = request.headers.get('Authorization');
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
+async function handleTrack(buyPricePassed?: number, sellPricePassed?: number) {
   try {
-    const data = await fetchGoldPrice({ forceRefresh: true });
+    let data;
+    if (buyPricePassed && sellPricePassed) {
+      console.log('[Cron Track API] Using passed prices:', { buyPricePassed, sellPricePassed });
+      const liveData = await fetchGoldPrice({ forceRefresh: true }).catch(() => null);
+      data = {
+        name: 'Nhẫn Trơn 9999',
+        buyPrice: buyPricePassed,
+        sellPrice: sellPricePassed,
+        sjcRing: liveData?.sjcRing || null,
+        worldGold: liveData?.worldGold || null
+      };
+    } else {
+      console.log('[Cron Track API] No prices passed, scraping live...');
+      data = await fetchGoldPrice({ forceRefresh: true });
+    }
+
     if (!data) {
       return NextResponse.json({ error: 'Failed to fetch price' }, { status: 500 });
     }
@@ -176,4 +186,21 @@ export async function GET(request: Request) {
     console.error('Error in cron track:', error);
     return NextResponse.json({ error: message }, { status: 500 });
   }
+}
+
+export async function GET(request: Request) {
+  const authHeader = request.headers.get('Authorization');
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  return handleTrack();
+}
+
+export async function POST(request: Request) {
+  const authHeader = request.headers.get('Authorization');
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  const body = await request.json().catch(() => ({}));
+  return handleTrack(body.buyPrice, body.sellPrice);
 }
